@@ -1,5 +1,6 @@
 import express from "express";
 import {cert, initializeApp} from "firebase-admin/app";
+import readyRouter from "./ready/readyRouter";
 
 if(process.env.FIREBASE_ADMIN_JSON){
     //in dev docker
@@ -12,6 +13,7 @@ if(process.env.FIREBASE_ADMIN_JSON){
 
 const app = express()
 app.use(express.json())
+app.use("/ready", readyRouter)
 
 app.get("/", (req: express.Request, res: express.Response) => {
     res.status(200).send("Hello World!")
