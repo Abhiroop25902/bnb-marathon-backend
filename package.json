@@ -1,0 +1,17 @@
+{
+  "name": "graph_chat_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "bun run --watch ./src/index.ts"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "firebase-admin": "^13.6.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5"
+  },
+  "private": true
+}
