@@ -1,0 +1,16 @@
+### Set JwtToken
+POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={{API_KEY}}
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "returnSecureToken": true
+}
+> {%
+    client.global.set("auth_token", response.body.idToken);
+%}
+
+### Send POST request with json body
+GET localhost:8080/testJwtRoute
+Authorization: Bearer {{auth_token}}
