@@ -2,14 +2,6 @@ import express from "express";
 import {cert, initializeApp} from "firebase-admin/app";
 import readyRouter from "./ready/readyRouter";
 
-if(process.env.FIREBASE_ADMIN_JSON){
-    //in dev docker
-    const fireBaseAdminJson = JSON.parse(process.env.FIREBASE_ADMIN_JSON);
-    initializeApp({credential: cert(fireBaseAdminJson)});
-}else{
-    // in firebase
-    initializeApp();
-}
 
 const app = express()
 app.use(express.json())
