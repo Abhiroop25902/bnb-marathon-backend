@@ -12,5 +12,5 @@ Content-Type: application/json
 %}
 
 ### Send POST request with json body
-GET localhost:8080/testJwtRoute
+GET localhost:8080/mealLog?range=lw
 Authorization: Bearer {{auth_token}}

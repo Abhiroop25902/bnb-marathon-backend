@@ -1,12 +1,12 @@
 import express from "express";
 import readyRouter from "./routes/ready";
-import testJwtRoute from "./routes/testJwtRoute";
+import mealLogRouter from "./routes/mealLog";
 
 
 const app = express()
 app.use(express.json())
 app.use("/ready", readyRouter)
-app.use("/testJwtRoute", testJwtRoute)
+app.use("/mealLog", mealLogRouter)
 
 app.get("/", (req: express.Request, res: express.Response) => {
     res.status(200).send("Hello World!")

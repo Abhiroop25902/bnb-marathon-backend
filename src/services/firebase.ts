@@ -11,5 +11,6 @@ if (process.env.FIREBASE_ADMIN_JSON) {
     admin.initializeApp();
 }
 
-export const firebaseAuth = admin.auth()
+export const auth = admin.auth()
+export const db = admin.firestore()
 

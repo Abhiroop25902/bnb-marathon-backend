@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {firebaseAuth} from "../services/firebaseAuth";
+import {auth} from "../services/firebase";
 
 export default async function verifyJwtMiddleware(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
@@ -11,7 +11,7 @@ export default async function verifyJwtMiddleware(req: Request, res: Response, n
 
     try {
         const token = authHeader.replace('Bearer ', '');
-        res.locals.user = await firebaseAuth.verifyIdToken(token);
+        res.locals.user = await auth.verifyIdToken(token);
         next();
     } catch (error) {
         console.log(`Wrong token request found for ${req.path}`);
