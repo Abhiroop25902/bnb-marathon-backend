@@ -7,11 +7,13 @@
     "dev": "bun run --watch ./src/index.ts"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "date-arithmetic": "^4.1.0",
     "express": "^5.1.0",
     "firebase-admin": "^13.6.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/date-arithmetic": "^4.1.4",
     "@types/express": "^5.0.5"
   },
