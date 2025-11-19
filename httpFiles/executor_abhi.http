@@ -11,6 +11,23 @@ Content-Type: application/json
     client.global.set("auth_token", response.body.idToken);
 %}
 
-### Send GET request for scheduled
-GET localhost:8080/logs?range=lw
+### Send POST request for scheduled
+POST localhost:8080/logs?range=lw
 Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "imgUrl": "https://images.unsplash.com/photo-1599493356626-9fdbdabfd9bd",
+  "detectedFoods": [
+    "pringles"
+  ],
+  "estimatedMacros": {
+    "carbs_g": 16,
+    "fat_g": 9,
+    "protein_g": 1
+  },
+  "mealType": "other",
+  "processed": true,
+  "rawText": "50 gm Pringles Salted",
+  "symptoms": []
+}

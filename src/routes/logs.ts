@@ -3,6 +3,9 @@ import verifyJwtMiddleware from "../middleware/verifyJwtMiddleware";
 import {DecodedIdToken} from "firebase-admin/auth";
 import {db} from "../services/firebase";
 import * as dateMath from 'date-arithmetic'
+import admin from "firebase-admin";
+import {z} from "zod";
+import LogPostPayloadSchema from "../schema/LogPostPayloadSchema";
 
 const router = express.Router();
 
@@ -41,6 +44,34 @@ router.get("/", verifyJwtMiddleware, async (req: express.Request, res: ResponseT
     }
 
 
+})
+
+router.post("/", verifyJwtMiddleware, async (req: express.Request, res: ResponseType) => {
+    const user = res.locals.user;
+
+    try {
+        const log = LogPostPayloadSchema.parse(req.body);
+
+        const ref = db.collection("logs").doc();
+        await ref.set({
+            ...log,
+            userId: user.uid,
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        })
+
+        return res.status(201).json({id: ref.id});
+
+    } catch (err) {
+        console.error(err);
+
+        if (err instanceof z.ZodError) {
+            return res.status(400).json({
+                error: "Invalid request body",
+                details: z.treeifyError(err),
+            });
+        }
+        return res.status(500).json({error: "server error"});
+    }
 })
 
 export default router;

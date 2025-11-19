@@ -10,7 +10,8 @@
     "cors": "^2.8.5",
     "date-arithmetic": "^4.1.0",
     "express": "^5.1.0",
-    "firebase-admin": "^13.6.0"
+    "firebase-admin": "^13.6.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
