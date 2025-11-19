@@ -1,6 +1,6 @@
 import express from "express";
 import readyRouter from "./routes/ready";
-import mealLogRouter from "./routes/mealLog";
+import logRouter from "./routes/logs";
 import scheduledRouter from "./routes/scheduled";
 import cors from "cors";
 
@@ -10,9 +10,8 @@ app.use(express.json())
 app.use(cors())
 
 app.use("/ready", readyRouter)
-app.use("/mealLog", mealLogRouter)
+app.use("/logs", logRouter)
 app.use("/scheduled", scheduledRouter);
-
 
 app.get("/", (req: express.Request, res: express.Response) => {
     res.status(200).send("Hello World!")

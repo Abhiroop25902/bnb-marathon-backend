@@ -24,8 +24,8 @@ router.get("/", verifyJwtMiddleware, async (req: express.Request, res: ResponseT
         const durationEndDate = new Date();
         const durationStartDate = range == "lw" ? dateMath.subtract(durationEndDate, 1, "week") : dateMath.subtract(durationEndDate, 1, "month");
 
-        const snap = await db.collection("mealLog")
-            .where("createdByUserId", "==", user.uid)
+        const snap = await db.collection("logs")
+            .where("userId", "==", user.uid)
             .where("createdAt", ">=", durationStartDate)
             .where("createdAt", "<=", durationEndDate)
             .orderBy("createdAt", "desc").get();
