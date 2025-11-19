@@ -1,0 +1,23 @@
+@host = http://localhost:3000
+@uid = u_niyati
+@jwt = eyJhbGciOiJSUzI1NiIsImtpZCI6IjM4MDI5MzRmZTBlZWM0NmE1ZWQwMDA2ZDE0YTFiYWIwMWUzNDUwODMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiTml5YXRpIFNoYWgiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSWlzM3ZVbzdtRFJSSk1jcTRKemh4cWJCMzZWcldEUnBzMWw5RnB1LWFxZXdISGdBPXM5Ni1jIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2JuYi1tYXJhdGhvbi00NzgyMTYiLCJhdWQiOiJibmItbWFyYXRob24tNDc4MjE2IiwiYXV0aF90aW1lIjoxNzYzNTUwNTI1LCJ1c2VyX2lkIjoid1dyT3ZmMks1bGVXTW04ejJvU0pPU2FJUGp2MiIsInN1YiI6IndXck92ZjJLNWxlV01tOHoyb1NKT1NhSVBqdjIiLCJpYXQiOjE3NjM1NTA1MjUsImV4cCI6MTc2MzU1NDEyNSwiZW1haWwiOiJrZWVwbWVwb3N0ZWQ5NUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJnb29nbGUuY29tIjpbIjEwNTE4NjAyNDExMTcyMjg0MTcyOSJdLCJlbWFpbCI6WyJrZWVwbWVwb3N0ZWQ5NUBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJnb29nbGUuY29tIn19.gqMKEDWg2x7l5r1v3HxRbAbAzC1uqp1pl4pO_jOi9DPBsbWC8jcs2uKK4CaMCIhpYd2Cvy3wpClD1nnqppbOqbsipYkygCGAAlPx7vaROIVKrYMP6kzlLl0ABtb9mkWwjlzaAuoftdqY15wlBK-07wpSaCmI-O-R4t9L9p8vmcF-6gtbdTUtSc4v59T58nF8jUL0FN2enuQYqwMgkMG3B984hgoMzMSR1EUOve9GG_39xwr1AGxS4Suyy6ri2_7upGsnCd6TcTuT7FK_EZiQ6HgVUC02QVe3IUAN0ohd3MUMfhzA_E_hDA8uQCwSHeaaPlG8hnYzuHCwW5xNHUURpw
+
+
+
+### Health check
+GET http://localhost:3000/ready
+
+### Get Scheduled (last week)
+GET http://localhost:3000/scheduled?range=lw
+Authorization: Bearer {{jwt}}
+
+### Add a Meal Log
+POST http://localhost:3000/mealLog
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+  "userId": "{{uid}}",
+  "mealType": "breakfast",
+  "rawText": "oats + banana"
+}

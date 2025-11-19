@@ -11,6 +11,6 @@ Content-Type: application/json
     client.global.set("auth_token", response.body.idToken);
 %}
 
-### Send POST request with json body
-GET localhost:8080/mealLog?range=lw
+### Send GET request for scheduled
+GET localhost:8080/scheduled?range=lw
 Authorization: Bearer {{auth_token}}
