@@ -13,4 +13,5 @@ if (process.env.FIREBASE_ADMIN_JSON) {
 
 export const auth = admin.auth()
 export const db = admin.firestore()
+export {admin}
 
