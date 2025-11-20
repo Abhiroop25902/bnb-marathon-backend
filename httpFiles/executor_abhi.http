@@ -11,27 +11,6 @@ Content-Type: application/json
     client.global.set("auth_token", response.body.idToken);
 %}
 
-### Send POST request for scheduled
-POST localhost:8080/logs?range=lw
+### Send GET request for scheduled
+GET localhost:8080/user/me
 Authorization: Bearer {{auth_token}}
-Content-Type: application/json
-
-{
-  "createdAt": "2025-11-20T03:30:00.000Z",
-  "imgUrl": "https://rakskitchen.net/wp-content/uploads/2013/02/upma-recipe-feat.jpg",
-  "detectedFoods": [
-    "upma"
-  ],
-  "estimatedMacros": {
-    "carbs_g": 20,
-    "fat_g": 4,
-    "protein_g": 3
-  },
-  "mealType": "breakfast",
-  "processed": false,
-  "rawText": "100 gm Upma",
-  "symptoms": [
-    "Acidity",
-    "Stomach Burn"
-  ]
-}
