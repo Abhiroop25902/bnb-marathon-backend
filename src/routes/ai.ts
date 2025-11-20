@@ -1,10 +1,15 @@
 // src/routes/ai.ts
-import { Router } from "express";
-import { ai } from "../genkit";
-import { db, admin } from "../services/firebase";
-import { v4 as uuidv4 } from "uuid";
-import { RecommendationDocSchema } from "../schema/RecommendationSchema";
+import express, {Router} from "express";
+import {ai} from "../genkit";
+import {admin, db} from "../services/firebase";
+import {v4 as uuidv4} from "uuid";
+import {RecommendationDocSchema} from "../schema/RecommendationSchema";
 import verifyJwtMiddleware from "../middleware/verifyJwtMiddleware";
+import {DecodedIdToken} from "firebase-admin/auth";
+
+type ResponseType = express.Response & {
+    locals: express.Response['locals'] & { user: DecodedIdToken }
+}
 
 const router = Router();
 
@@ -13,16 +18,16 @@ const router = Router();
  * Body: { date?: 'YYYY-MM-DD', count?: number }
  * Auth: Bearer <Firebase ID token>
  */
-router.post("/recommendations/generate", verifyJwtMiddleware, async (req, res) => {
+router.post("/recommendations/generate", verifyJwtMiddleware, async (req, res: ResponseType) => {
     try {
-        const uid = (res as any).locals.uid as string;
+        const user = res.locals.user;
         const date = req.body.date || new Date().toISOString().slice(0, 10);
         const count = Number(req.body.count || 3);
 
         // Fetch user document
-        const userRef = db.collection("users").doc(uid);
+        const userRef = db.collection("users").doc(user.uid);
         const userSnap = await userRef.get();
-        if (!userSnap.exists) return res.status(404).json({ error: "User not found" });
+        if (!userSnap.exists) return res.status(404).json({error: "User not found"});
         const userData = userSnap.data() || {};
 
         // Build concise prompt with explicit JSON output requirement
@@ -56,20 +61,19 @@ Use null for unknown numeric values.
 
         // Call Genkit/Genie (Gemini) and request JSON output
         const response = await ai.generate({
-            model: process.env.GENKIT_MODEL || "models/gemini-1.5-flash",
             prompt,
-            output: { format: "json" }
+            output: {format: "json"}
         });
 
         // Genkit returns parsed JSON for format: "json"
         const rawOut = response.output();
         if (!rawOut) {
             console.error("Genkit returned empty output", response);
-            return res.status(500).json({ error: "AI returned empty output" });
+            return res.status(500).json({error: "AI returned empty output"});
         }
 
         // Normalize items and attach metadata
-        const items = (rawOut as any[]).map((it: any, i: number) => ({
+        const items = (rawOut as any[]).map((it: any) => ({
             id: it.id || uuidv4(),
             title: it.title,
             description: it.description ?? null,
@@ -83,7 +87,7 @@ Use null for unknown numeric values.
             source: "ai",
             locked: false,
             createdAt: admin.firestore.Timestamp.fromDate(new Date()),
-            aiTrace: { raw: response, promptUsed: prompt }
+            aiTrace: {raw: response, promptUsed: prompt}
         }));
 
         const doc = {
@@ -99,11 +103,11 @@ Use null for unknown numeric values.
         const parsedDoc = RecommendationDocSchema.safeParse(doc);
         if (!parsedDoc.success) {
             console.error("Zod validation failed:", parsedDoc.error.format());
-            return res.status(500).json({ error: "Validation failed", details: parsedDoc.error.format() });
+            return res.status(500).json({error: "Validation failed", details: parsedDoc.error.format()});
         }
 
         // Save to Firestore: users/{uid}/recommendations/{date}
-        const recRef = db.collection("users").doc(uid).collection("recommendations").doc(date);
+        const recRef = db.collection("users").doc(user.uid).collection("recommendations").doc(date);
         await recRef.set({
             meta: {
                 generatedAt: doc.meta.generatedAt,
@@ -116,10 +120,10 @@ Use null for unknown numeric values.
             }))
         } as any);
 
-        return res.json({ ok: true, items: doc.items });
+        return res.json({ok: true, items: doc.items});
     } catch (err) {
         console.error("AI generate error:", err);
-        return res.status(500).json({ error: "server error", details: err instanceof Error ? err.message : err });
+        return res.status(500).json({error: "server error", details: err instanceof Error ? err.message : err});
     }
 });
 
