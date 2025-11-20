@@ -12,5 +12,25 @@ Content-Type: application/json
 %}
 
 ### Send GET request for scheduled
-GET localhost:8080/user/me
+POST localhost:8080/user
 Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "cycle": {
+    "cycleLength": 28,
+    "lastPeriodStart": "2025-11-15T00:00:00.000Z"
+  },
+  "onboarding": {
+    "completed": true,
+    "completedAt": "2025-11-20T12:34:45.738Z",
+    "version": "v1"
+  },
+  "preference": {
+    "proteinTarget_g": 35,
+    "sensitivities": [
+      "fish"
+    ],
+    "vegetarian": false
+  }
+}
