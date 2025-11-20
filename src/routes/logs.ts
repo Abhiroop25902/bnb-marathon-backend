@@ -3,9 +3,9 @@ import verifyJwtMiddleware from "../middleware/verifyJwtMiddleware";
 import {DecodedIdToken} from "firebase-admin/auth";
 import {db} from "../services/firebase";
 import * as dateMath from 'date-arithmetic'
-import admin from "firebase-admin";
 import {z} from "zod";
 import LogPostPayloadSchema from "../schema/LogPostPayloadSchema";
+import {Timestamp} from "firebase-admin/firestore";
 
 const router = express.Router();
 
@@ -51,12 +51,13 @@ router.post("/", verifyJwtMiddleware, async (req: express.Request, res: Response
 
     try {
         const log = LogPostPayloadSchema.parse(req.body);
+        const createdAt = Timestamp.fromDate(new Date(log.createdAt));
 
         const ref = db.collection("logs").doc();
         await ref.set({
             ...log,
             userId: user.uid,
-            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            createdAt: createdAt,
         })
 
         return res.status(201).json({id: ref.id});

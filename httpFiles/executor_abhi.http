@@ -17,17 +17,21 @@ Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 {
-  "imgUrl": "https://images.unsplash.com/photo-1599493356626-9fdbdabfd9bd",
+  "createdAt": "2025-11-20T03:30:00.000Z",
+  "imgUrl": "https://rakskitchen.net/wp-content/uploads/2013/02/upma-recipe-feat.jpg",
   "detectedFoods": [
-    "pringles"
+    "upma"
   ],
   "estimatedMacros": {
-    "carbs_g": 16,
-    "fat_g": 9,
-    "protein_g": 1
+    "carbs_g": 20,
+    "fat_g": 4,
+    "protein_g": 3
   },
-  "mealType": "other",
-  "processed": true,
-  "rawText": "50 gm Pringles Salted",
-  "symptoms": []
+  "mealType": "breakfast",
+  "processed": false,
+  "rawText": "100 gm Upma",
+  "symptoms": [
+    "Acidity",
+    "Stomach Burn"
+  ]
 }

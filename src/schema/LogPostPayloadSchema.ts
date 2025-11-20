@@ -11,8 +11,9 @@ const LogPostPayloadSchema = z.object({
     mealType: z.enum(["breakfast", "lunch", "snacks", "dinner", "other"]),
     processed: z.boolean(),
     rawText: z.string(),
-    symptoms: z.array(z.string()).optional()
-    //createdAt and userId will be created on post request
+    symptoms: z.array(z.string()).optional(),
+    createdAt: z.string()
+    //userId will be created on post request
 })
 
 export default LogPostPayloadSchema
