@@ -66,7 +66,7 @@ Use null for unknown numeric values.
         });
 
         // Genkit returns parsed JSON for format: "json"
-        const rawOut = response.output();
+        const rawOut = response.output;
         if (!rawOut) {
             console.error("Genkit returned empty output", response);
             return res.status(500).json({error: "AI returned empty output"});
@@ -83,17 +83,15 @@ Use null for unknown numeric values.
             carbs_g: typeof it.carbs_g === "number" ? it.carbs_g : null,
             fat_g: typeof it.fat_g === "number" ? it.fat_g : null,
             ingredients: Array.isArray(it.ingredients) ? it.ingredients : [],
-            recipeSteps: Array.isArray(it.recipeSteps) ? it.recipeSteps : undefined,
             source: "ai",
             locked: false,
             createdAt: admin.firestore.Timestamp.fromDate(new Date()),
-            aiTrace: {raw: response, promptUsed: prompt}
         }));
 
         const doc = {
             meta: {
                 generatedAt: admin.firestore.Timestamp.fromDate(new Date()),
-                model: process.env.GENKIT_MODEL || "models/gemini-1.5-flash",
+                model: process.env.GENKIT_MODEL || 'gemini-2.5-flash',
                 promptVersion: "v1"
             },
             items
