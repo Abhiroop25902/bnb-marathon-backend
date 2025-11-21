@@ -45,7 +45,7 @@ router.get("/", verifyJwtMiddleware, async (req: express.Request, res: ResponseT
 
         // Query scheduled entries for this user
         const snap = await db.collection("scheduled")
-            .where("userId", "==", user.uid)
+            .where("uid", "==", user.uid)
             .where("lockedAt", ">=", tsStart)
             .where("lockedAt", "<=", tsEnd)
             .orderBy("lockedAt", "desc")
