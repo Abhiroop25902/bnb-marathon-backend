@@ -4,6 +4,7 @@ import logRouter from "./routes/logs";
 import scheduledRouter from "./routes/scheduled";
 import userRouter from "./routes/user";
 import aiRouter from "./routes/ai";
+import recommendationRouter from "./routes/recommendation";
 import cors from "cors";
 
 
@@ -16,6 +17,8 @@ app.use("/logs", logRouter)
 app.use("/scheduled", scheduledRouter);
 app.use("/user", userRouter);
 app.use("/ai", aiRouter);
+app.use("/recommendation", recommendationRouter);
+
 
 app.get("/", (req: express.Request, res: express.Response) => {
     res.status(200).send("Hello World!")
