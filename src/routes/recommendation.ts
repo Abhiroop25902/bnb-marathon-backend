@@ -14,7 +14,8 @@ router.delete('/:id', verifyJwtMiddleware, async (req, res: ResponseType) => {
     const recId = req.params.id;
 
     try {
-        const ref = db.collection("today_recommendations").doc(recId);
+        const todayDateString = new Date().toISOString().split("T")[0];
+        const ref = db.collection(`users/${user.uid}/recommendations`).doc(todayDateString);
         const snap = await ref.get();
 
         if (!snap.exists) {
@@ -23,14 +24,18 @@ router.delete('/:id', verifyJwtMiddleware, async (req, res: ResponseType) => {
 
         const data = snap.data();
 
-        // @ts-ignore
-        if (data['userId'] !== user.uid) {
-            return res.status(401).json({error: "unauthorized"});
-        }
+        //@ts-ignore
+        const updatedItems = data.items.filter(e => e.id !== recId);
 
-        await ref.delete();
+        //@ts-ignore
+        const deletedItem = data.items.filter(e => e.id === recId);
 
-        return res.status(200).json({...data});
+        await ref.set({
+            ...data,
+            items: updatedItems,
+        });
+
+        return res.status(200).json(deletedItem);
 
     } catch (err) {
         return res.status(500).json({error: "server error"});
