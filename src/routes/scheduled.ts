@@ -74,7 +74,7 @@ router.post('/', verifyJwtMiddleware, async (req: express.Request, res: Response
     try {
         const scheduledPost = ScheduledPostPayloadSchema.parse(req.body);
 
-        const dataToAdd = {...scheduledPost, id: undefined, uid: user.uid, lockedAt: Timestamp.now()};
+        const dataToAdd = {...scheduledPost, uid: user.uid, lockedAt: Timestamp.now()};
 
         const ref = db.collection("scheduled").doc();
 
@@ -86,6 +86,7 @@ router.post('/', verifyJwtMiddleware, async (req: express.Request, res: Response
         })
 
     } catch (err) {
+        console.error(err)
         return res.status(500).json({error: "server error"});
     }
 })
