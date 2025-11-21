@@ -1,9 +1,11 @@
 import express from "express";
 import verifyJwtMiddleware from "../middleware/verifyJwtMiddleware";
-import { DecodedIdToken } from "firebase-admin/auth";
-import { db } from "../services/firebase";
+import {DecodedIdToken} from "firebase-admin/auth";
+import {db} from "../services/firebase";
 import * as dateMath from "date-arithmetic";
 import admin from "firebase-admin";
+import {ScheduledPostPayloadSchema} from "../schema/ScheduledPostPayloadSchema";
+import {Timestamp} from "firebase-admin/firestore";
 
 const router = express.Router();
 
@@ -23,13 +25,13 @@ router.get("/", verifyJwtMiddleware, async (req: express.Request, res: ResponseT
     const range = String(req.query.range || "");
 
     if (!["lw", "lm"].includes(range)) {
-        return res.status(400).json({ error: "range must be 'lw' or 'lm'" });
+        return res.status(400).json({error: "range must be 'lw' or 'lm'"});
     }
 
     try {
         const user = res.locals.user;
         if (!user || !user.uid) {
-            return res.status(401).json({ error: "unauthenticated" });
+            return res.status(401).json({error: "unauthenticated"});
         }
 
         const now = new Date();
@@ -62,8 +64,30 @@ router.get("/", verifyJwtMiddleware, async (req: express.Request, res: ResponseT
 
     } catch (err: any) {
         console.error("GET /scheduled error:", err);
-        return res.status(500).json({ error: "server error", details: err.message });
+        return res.status(500).json({error: "server error", details: err.message});
     }
 });
+
+router.post('/', verifyJwtMiddleware, async (req: express.Request, res: ResponseType) => {
+    const user = res.locals.user;
+
+    try {
+        const scheduledPost = ScheduledPostPayloadSchema.parse(req.body);
+
+        const dataToAdd = {...scheduledPost, id: undefined, uid: user.uid, lockedAt: Timestamp.now()};
+
+        const ref = db.collection("scheduled").doc();
+
+        await ref.set(dataToAdd);
+
+        return res.status(200).json({
+            ...dataToAdd,
+            id: ref.id,
+        })
+
+    } catch (err) {
+        return res.status(500).json({error: "server error"});
+    }
+})
 
 export default router;
