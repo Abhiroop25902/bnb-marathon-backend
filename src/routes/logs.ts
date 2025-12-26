@@ -6,6 +6,7 @@ import * as dateMath from 'date-arithmetic'
 import {z} from "genkit";
 import LogPostPayloadSchema from "../schema/LogPostPayloadSchema";
 import {Timestamp} from "firebase-admin/firestore";
+import getMacros from "../usecase/logs.usecase";
 
 const router = express.Router();
 
@@ -51,11 +52,17 @@ router.post("/", verifyJwtMiddleware, async (req: express.Request, res: Response
 
     try {
         const log = LogPostPayloadSchema.parse(req.body);
+        
+        const macroDetailPromise = log.imgUrl ? getMacros(log.imgUrl) : Promise.resolve(undefined);
         const createdAt = Timestamp.fromDate(new Date(log.createdAt));
 
         const ref = db.collection("logs").doc();
+
+        const macroDetails = await macroDetailPromise;
+
         await ref.set({
             ...log,
+            ...macroDetails,
             userId: user.uid,
             createdAt: createdAt,
         })
@@ -68,7 +75,7 @@ router.post("/", verifyJwtMiddleware, async (req: express.Request, res: Response
         if (err instanceof z.ZodError) {
             return res.status(400).json({
                 error: "Invalid request body",
-                details: z.treeifyError(err),
+                details: err,
             });
         }
         return res.status(500).json({error: "server error"});

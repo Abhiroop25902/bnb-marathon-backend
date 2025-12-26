@@ -66,7 +66,7 @@ router.post('/', verifyJwtMiddleware, async (req, res: ResponseType) => {
         if (err instanceof z.ZodError) {
             return res.status(400).json({
                 error: "Invalid request body",
-                details: z.treeifyError(err),
+                details: err,
             });
         }
         return res.status(500).json({error: "server error"});
@@ -81,7 +81,7 @@ router.patch('/', verifyJwtMiddleware, async (req, res: ResponseType) => {
         const snap = await ref.get();
 
         if (!snap.exists) {
-            return res.status(404).json({ error: "User document does not exist" });
+            return res.status(404).json({error: "User document does not exist"});
         }
 
         // 1. Parse partial user update body
@@ -153,9 +153,9 @@ router.patch('/', verifyJwtMiddleware, async (req, res: ResponseType) => {
         }
 
         // 3. Apply partial update (FireStore merge)
-        await ref.set(updateData, { merge: true });
+        await ref.set(updateData, {merge: true});
 
-        return res.status(200).json({ message: "User updated successfully" });
+        return res.status(200).json({message: "User updated successfully"});
 
     } catch (err) {
         console.error(err);
@@ -163,11 +163,11 @@ router.patch('/', verifyJwtMiddleware, async (req, res: ResponseType) => {
         if (err instanceof z.ZodError) {
             return res.status(400).json({
                 error: "Invalid request body",
-                details: z.treeifyError(err),
+                details: err
             });
         }
 
-        return res.status(500).json({ error: "server error" });
+        return res.status(500).json({error: "server error"});
     }
 });
 
