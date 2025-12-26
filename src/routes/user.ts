@@ -21,7 +21,17 @@ router.get("/me", verifyJwtMiddleware, async (req, res: ResponseType) => {
         const snap = await ref.get();
 
         if (!snap.exists) {
-            return res.status(404).json({error: "User not found"});
+            // this will happen if new user signs up, hence return dummy data for onboarding
+            return res.status(200).json({
+                id: snap.id,
+                onboarding: {
+                    completed: false,
+                    completedAt: {_seconds: 0, _nanoseconds: 0}
+                },
+                cycle: {
+                    lastPeriodStart: {_seconds: 0, _nanoseconds: 0}
+                }
+            });
         }
 
         const data = snap.data();
