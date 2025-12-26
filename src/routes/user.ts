@@ -4,7 +4,7 @@ import verifyJwtMiddleware from "../middleware/verifyJwtMiddleware";
 import {DecodedIdToken} from "firebase-admin/auth";
 import UserPostPayloadSchema from "../schema/UserPostPayloadSchema";
 import {Timestamp} from "firebase-admin/firestore";
-import {z} from "zod";
+import {z} from "genkit";
 import {UserPatchPayloadSchema} from "../schema/UserPatchPayloadSchema";
 
 type ResponseType = express.Response & {

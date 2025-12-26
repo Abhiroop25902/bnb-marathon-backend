@@ -1,5 +1,5 @@
 // src/schema/RecommendationSchema.ts
-import { z } from "zod";
+import {z} from 'genkit';
 
 export const RecommendationItemSchema = z.object({
     id: z.string(),

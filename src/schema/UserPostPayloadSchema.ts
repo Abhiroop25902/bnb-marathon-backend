@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {z} from 'genkit'
 
 const UserPostPayload = z.object({
     cycle: z.object({

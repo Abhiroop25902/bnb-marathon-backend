@@ -1,4 +1,5 @@
-import {z} from "zod";
+import {z} from 'genkit';
+
 
 export const ScheduledPostPayloadSchema = z.object({
     id: z.string(),

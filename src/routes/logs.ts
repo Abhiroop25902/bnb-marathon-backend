@@ -3,7 +3,7 @@ import verifyJwtMiddleware from "../middleware/verifyJwtMiddleware";
 import {DecodedIdToken} from "firebase-admin/auth";
 import {db} from "../services/firebase";
 import * as dateMath from 'date-arithmetic'
-import {z} from "zod";
+import {z} from "genkit";
 import LogPostPayloadSchema from "../schema/LogPostPayloadSchema";
 import {Timestamp} from "firebase-admin/firestore";
 

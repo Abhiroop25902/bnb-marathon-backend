@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {z} from 'genkit'
 
 export const UserPatchPayloadSchema = z.object({
     cycle: z.object({

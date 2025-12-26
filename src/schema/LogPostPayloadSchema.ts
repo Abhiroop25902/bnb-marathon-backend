@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {z} from 'genkit';
 
 const LogPostPayloadSchema = z.object({
     imgUrl: z.string().optional(),
