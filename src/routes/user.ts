@@ -52,6 +52,8 @@ router.post('/', verifyJwtMiddleware, async (req, res: ResponseType) => {
             cycle: {
                 ...givenUserData.cycle,
                 lastPeriodStart: Timestamp.fromDate(new Date(givenUserData.cycle.lastPeriodStart)),
+                previousPeriodStart: givenUserData.cycle.previousPeriodStart ? Timestamp.fromDate(new Date(givenUserData.cycle.previousPeriodStart)) : undefined,
+                thirdLastPeriodStart: givenUserData.cycle.thirdLastPeriodStart ? Timestamp.fromDate(new Date(givenUserData.cycle.thirdLastPeriodStart)) : undefined,
             },
             onboarding: {
                 ...givenUserData.onboarding,
